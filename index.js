@@ -20,27 +20,32 @@ function parseOptions(options) {
 
 
 
-function GnipReader(usernameOrAuthKey, password, accountName, stream, requestPageSize) {
-  stream = stream || 'test';
+function GnipReader(options) {
+  stream = options.stream || 'test';
 
   // Object properties
   var __options = {
-    accountName: accountName,
-    stream: stream
+    accountName: options.accountName,
+    stream: stream,
   };
 
-  if ({}.toString.call(password) === '[object String]') {
-    __options.username = usernameOrAuthKey;
-    __options.password = password;
-  } else {
-    __options.gnipAuthKey = usernameOrAuthKey;
+  if (options.password) {
+    __options.username = options.username;
+    __options.password = options.password;
+  } else if (options.gnipAuthKey) {
+    __options.gnipAuthKey = gnipAuthKey;
   }
 
-  var templateUrl = util.format('https://search.gnip.com/accounts/%s/search/%s%s.json', __options.accountName, __options.stream),
-      countSuffix = '/counts';
+  var templateUrl;
+
+  if (options.url) {
+    templateUrl = options.url;
+  } else {
+    templateUrl = util.format('https://search.gnip.com/accounts/%s/search/%s%s.json', __options.accountName, __options.stream);
+  }
 
   this.nextKey = null;
-  this.requestPageSize = requestPageSize || null;
+  this.requestPageSize = options.requestPageSize || null;
 
   var self = this;
 
@@ -65,7 +70,7 @@ function GnipReader(usernameOrAuthKey, password, accountName, stream, requestPag
       }
     };
     return _.merge({
-      url: util.format(templateUrl, (getEstimate === true)?countSuffix:''),
+      url: util.format(templateUrl, (getEstimate === true)?'/counts':''),
       gzip: true,
       json: true
     }, authPayload, additionalPayload);

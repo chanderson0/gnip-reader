@@ -24,14 +24,31 @@ The module provides a single class. Initialize an instance of the class using yo
     $ npm install gnip-reader
 
 ### Creating a Reader
-Initialize a `GnipReader` object with `username`, `password`, `account name`, and `stream name`.
+Initialize a `GnipReader` object with `username`, `password`, `accountName`, and `stream`.
 
-For example, if your account name is `FooInc` and your stream name is `test`, your query URL will be `https://search.gnip.com/accounts/FooInc/search/test.json`. Create your `GnipReader` like this:
+For example, if your account name is `FooInc` and your stream name is `test`, your query URL will be something like `https://search.gnip.com/accounts/FooInc/search/test.json`. Create your `GnipReader` like this:
 
 ``` JavaScript
 var GnipReader = require('gnip-reader');
 
-var myReader = new GnipReader('foo@fooinc.com', 'apassword', 'FooInc', 'test');
+var myReader = new GnipReader({
+  username: 'foo@fooinc.com',
+  password: 'apassword',
+  accountName: 'FooInc',
+  stream: 'test'
+});
+```
+
+Optionally, you can construct your template URL yourself. Include a %s for the optional `/counts` path.
+
+``` JavaScript
+var GnipReader = require('gnip-reader');
+
+var myReader = new GnipReader({
+  username: 'foo@fooinc.com',
+  password: 'apassword',
+  url: 'https://search.gnip.com/accounts/FooInc/search/test%s.json'
+});
 ```
 
 ### Querying Gnip
