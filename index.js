@@ -74,12 +74,7 @@ function GnipReader(usernameOrAuthKey, password, accountName, stream, requestPag
   function doQuery(optionsOrQuery, getEstimate, useNext, callback) {
     // Get parameters based off 1) instance defaults, 2) passed overrides, and 3) required values.
     var nextParameters = useNext&&self.nextKey?{next: self.nextKey}:{},
-        gnipParameters = _.merge(overridableOptions(),
-    parseOptions(optionsOrQuery),
-    nextParameters,
-    {
-      'publisher': 'twitter',
-    });
+        gnipParameters = _.merge(overridableOptions(), parseOptions(optionsOrQuery), nextParameters);
 
     // Prepare them for sending to Gnip
     var requestOptions = buildOptions({
