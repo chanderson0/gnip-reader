@@ -37,11 +37,15 @@ function GnipReader(options) {
   }
 
   var templateUrl;
-
   if (options.url) {
     templateUrl = options.url;
   } else {
     templateUrl = util.format('https://search.gnip.com/accounts/%s/search/%s%s.json', __options.accountName, __options.stream);
+  }
+
+  var publisherOptions = {};
+  if (options.publisher) {
+    publisherOptions.publisher = options.publisher;
   }
 
   this.nextKey = null;
@@ -79,7 +83,7 @@ function GnipReader(options) {
   function doQuery(optionsOrQuery, getEstimate, useNext, callback) {
     // Get parameters based off 1) instance defaults, 2) passed overrides, and 3) required values.
     var nextParameters = useNext&&self.nextKey?{next: self.nextKey}:{},
-        gnipParameters = _.merge(overridableOptions(), parseOptions(optionsOrQuery), nextParameters);
+        gnipParameters = _.merge(overridableOptions(), parseOptions(optionsOrQuery), nextParameters, publisherOptions);
 
     // Prepare them for sending to Gnip
     var requestOptions = buildOptions({
