@@ -114,6 +114,25 @@ function GnipReader(options) {
     doQuery(optionsOrQuery, true, false, callback);
   };
 
+  this.fullEstimate = function(optionsOrQuery, callback) {
+    var totalRecords = [];
+    var options = parseOptions(optionsOrQuery);
+
+    doQuery(options, true, false, function loadNextPage(err, pageData, morePages) {
+      if (!err) {
+        totalRecords = totalRecords.concat(pageData);
+
+        if (morePages) {
+          doQuery(options, true, true, loadNextPage);
+        } else {
+          return callback(null, totalRecords);
+        }
+      } else {
+        return callback(err, totalRecords);
+      }
+    });
+  };
+
   this.search = function(optionsOrQuery, callback) {
     doQuery(optionsOrQuery, false, false, callback);
   };
