@@ -87,7 +87,7 @@ function GnipReader(options) {
 
     // Prepare them for sending to Gnip
     var requestOptions = buildOptions({
-      form: JSON.stringify(gnipParameters)
+      body: gnipParameters
     }, getEstimate);
 
     // And send them
